@@ -1,0 +1,20 @@
+package compile;
+
+import java.util.Random;
+
+public class {0} implements Strategy {
+    Random random = new Random();
+
+    private int RANDOM(int max) {
+        int x = random.nextInt(max + 1);
+        while (x == 0) {
+            x = random.nextInt(max + 1);
+        }
+        return x;
+    }
+
+    @Override
+    public int getValue(int CUR, int[] A, int[] B) {
+        {1}
+    }
+}
