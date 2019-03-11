@@ -6,11 +6,7 @@ public class {0} implements Strategy {
     Random random = new Random();
 
     private int RANDOM(int max) {
-        int x = random.nextInt(max + 1);
-        while (x == 0) {
-            x = random.nextInt(max + 1);
-        }
-        return x;
+        return random.nextInt(max + 1);
     }
 
     @Override
