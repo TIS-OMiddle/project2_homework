@@ -1,5 +1,5 @@
 @echo off
 cd bin
-java main.Main
+java -classpath .;..\lib\java-cup-11b-runtime.jar main.Main
 pause
 @echo on

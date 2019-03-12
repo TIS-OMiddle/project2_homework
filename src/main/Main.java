@@ -2,6 +2,7 @@ package main;
 
 import compile.Strategy;
 import compile.StrategyManager;
+import grammar.GrammarManager;
 
 import java.io.File;
 
@@ -18,6 +19,10 @@ public class Main {
             File file1 = new File("./data1.txt");
             File file2 = new File("./data2.txt");
 
+            //语法分析和检测,出错时会抛出异常和error
+            GrammarManager.analyze(file1);
+            GrammarManager.analyze(file2);
+
             //创建并编译策略
             StrategyManager.createStrategy("Strategy1", file1);
             StrategyManager.createStrategy("Strategy2", file2);
@@ -31,13 +36,16 @@ public class Main {
                 B[i] = strategy2.getValue(i, B, A);
             }
 
+            //输出选择
             for (int i = 1; i <= n; i++) {
                 System.out.println(A[i] + ":" + B[i]);
             }
             //清空临时文件
             StrategyManager.clearTemp();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+        } catch (Error e) {
+            System.out.println(e.getMessage());
         }
     }
 }

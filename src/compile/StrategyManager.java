@@ -113,11 +113,11 @@ public class StrategyManager extends ClassLoader {
     public static boolean createStrategy(String strategyName, File codeFile) {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(codeFile), "UTF-8"));
-            String content="";
+            StringBuilder sb = new StringBuilder();
             while (in.ready()) {
-                content += in.readLine()+"\n";
+                sb.append(in.readLine()).append('\n');
             }
-            return createStrategy(strategyName, content);
+            return createStrategy(strategyName, sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
