@@ -1,0 +1,35 @@
+//策略1
+return 1;
+end
+
+//策略2
+int i=RANDOM(3);
+if(i==3){return 0;}
+else {return 1;}
+end
+
+//策略3
+if(CUR==1){return 1;}
+else {return B[CUR-1];}
+end
+
+//策略4
+if(CUR==1){return 1;}
+else {
+int i=RANDOM(9);
+  if(i==9){return 0;}
+  else {return B[CUR-1];}
+}
+end
+
+//策略5
+int i=1;
+int k=1;
+while(k<CUR&&i==1){
+  if(B[k]==0)
+    i=0;
+  else {}
+  k=k+1;
+}
+return i;
+end

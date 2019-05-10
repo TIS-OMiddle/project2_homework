@@ -6,8 +6,8 @@ import java.util.List;
 
 
 /**
+ * @author 李俊宏、廖子良
  * 策略管理器，包含编译生成策略、获取已生成策略、清空缓存
- *
  */
 public class StrategyManager extends ClassLoader {
     //由IDE构建
@@ -19,12 +19,25 @@ public class StrategyManager extends ClassLoader {
     //临时文件集合
     private static List<File> fileList;
 
+    public static void setBuildByIDE(boolean buildByIDE) {
+        StrategyManager.buildByIDE = buildByIDE;
+        File file = new File(".");
+        //ide path
+        String path;
+        if (buildByIDE) {
+            path = file.getAbsolutePath().replace(".", "") + "bin";
+        } else {
+            path = file.getAbsolutePath().replace(".", "\\");
+        }
+        loader = new StrategyManager(path);
+    }
+
     static {
         File file = new File(".");
         //ide path
         String path;
         if (buildByIDE) {
-            path = file.getAbsolutePath().replace(".", "") + "bin" + File.separator;
+            path = file.getAbsolutePath().replace(".", "") + "bin";
         } else {
             path = file.getAbsolutePath().replace(".", "\\");
         }
@@ -73,8 +86,9 @@ public class StrategyManager extends ClassLoader {
 
     /**
      * 根据策略名和原生策略进行编译
+     *
      * @param strategyName 策略名
-     * @param code 原生策略代码
+     * @param code         原生策略代码
      * @return 是否创建成功
      */
     public static boolean createStrategy(String strategyName, String code) {
@@ -106,8 +120,9 @@ public class StrategyManager extends ClassLoader {
 
     /**
      * 根据策略名和原生策略进行编译
+     *
      * @param strategyName 策略名
-     * @param codeFile 原生策略代码文件
+     * @param codeFile     原生策略代码文件
      * @return 是否创建成功
      */
     public static boolean createStrategy(String strategyName, File codeFile) {
@@ -119,7 +134,7 @@ public class StrategyManager extends ClassLoader {
             }
             return createStrategy(strategyName, sb.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -138,7 +153,7 @@ public class StrategyManager extends ClassLoader {
     /**
      * 清除缓存
      */
-    public static void clearTemp(){
+    public static void clearTemp() {
         for (File file : fileList) {
             file.delete();
         }

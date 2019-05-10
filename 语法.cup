@@ -1,0 +1,94 @@
+/* user code */
+package grammar;
+import java_cup.runtime.*;
+   
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuilder m = new StringBuilder("Error");
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));   
+                if (s.right >= 0)                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+        m.append(" : "+message);
+        throw new Error(m.toString());
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+    }
+:};
+
+ 
+
+   
+/* ------------terminal and non terminal----------- */
+   
+/* ÖÕ½á·û */
+terminal   SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD,
+           LPAREN, RPAREN, LBRACK, RBRACK, LBRACE, RBRACE,
+           RANDOM, IF, ELSE, WHILE, INT, RETURN,
+           EQEQ, EQ, LESS, LESSEQ, GREATEREQ, GREATER,
+           COMMA, A, B, CUR;
+terminal   NUMBER, ID;
+   
+/* ·ÇÖÕ½á·û */
+non terminal   stmt_sequence, stmt_block_or_single, stament;
+non terminal   if_stmt, if_stmt_else, while_stmt, declare_stmt, declare_stmt_and, return_stmt, assign_stmt;
+non terminal   compare_exp, simple_exp, compare_op, addop, term, mulop, factor;
+
+
+
+/* --------------------BNF-------------------- */
+
+/* squence */
+stmt_sequence ::= stmt_sequence stament
+                | stament ;
+
+/* block or single stement */
+stmt_block_or_single ::= LBRACE stmt_sequence RBRACE
+                        | stament ;
+
+stament ::= if_stmt
+            | while_stmt
+            | declare_stmt SEMI
+            | return_stmt SEMI
+            | assign_stmt SEMI ;
+
+if_stmt ::= IF LPAREN compare_exp RPAREN stmt_block_or_single if_stmt_else;
+if_stmt_else ::= ELSE stmt_block_or_single;
+
+while_stmt ::= WHILE LPAREN compare_exp RPAREN stmt_block_or_single;
+
+declare_stmt ::= INT ID declare_stmt_and
+                | INT assign_stmt declare_stmt_and ;
+declare_stmt_and ::= COMMA ID declare_stmt_and
+                    | COMMA assign_stmt declare_stmt_and
+                    | /* empty */ ;
+
+return_stmt ::= RETURN simple_exp;
+
+assign_stmt ::= ID EQ simple_exp;
+
+compare_exp ::= simple_exp compare_op simple_exp;
+
+simple_exp ::= simple_exp addop term
+                | term;
+
+term ::= term mulop factor
+        | factor ;
+
+factor ::= LPAREN simple_exp RPAREN
+        | NUMBER
+        | ID
+        | CUR
+        | A LBRACK simple_exp RBRACK
+        | B LBRACK simple_exp RBRACK
+        | RANDOM LPAREN simple_exp RPAREN ;
+
+compare_op ::= EQEQ | LESSEQ | LESS | GREATEREQ | GREATER ;
+addop ::= PLUS | MINUS ;
+mulop ::= TIMES | DIVIDE | MOD ;
