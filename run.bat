@@ -2,4 +2,4 @@
 cd bin
 java -classpath .;..\lib\java-cup-11b-runtime.jar main.Main --noIDE
 @echo on
-pause
+pauseha  
